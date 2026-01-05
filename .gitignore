@@ -1,0 +1,21 @@
+# Knowledge Vault dependencies
+vault/
+concept_index.json
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Archive (old code, for reference only)
+archive/
+config.json
