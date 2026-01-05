@@ -7,11 +7,11 @@ description: Process book chapters or highlights into vault notes with full synt
 
 Process book content (highlights from Apple Books or pasted chapters) into integrated vault notes:
 
-1. **Extract content** — For Apple Books: `python utils/highlights.py "<Book Title>"`
+1. **Extract content** — For Apple Books: `./bin/highlights "<Book Title>"`
 2. **Load context** — Use `vault-context` skill
 3. **Synthesize** — Create structured notes with cross-references
 4. **Update context** — Enrich book and theme `_context.md` files
-5. **Rebuild index** — Run `python utils/index.py`
+5. **Rebuild index** — Run `./bin/index`
 
 ## When to Use Me
 
@@ -26,7 +26,7 @@ When the user says:
 
 **For Apple Books highlights:**
 ```bash
-python utils/highlights.py "Book Title"
+./bin/highlights "Book Title"
 ```
 
 **For pasted content:**
@@ -138,7 +138,7 @@ If this is the first content from a book, create `vault/{Theme}/{Book}/_context.
 
 ### Step 6: Rebuild Index
 ```bash
-python utils/index.py
+./bin/index
 ```
 
 ## Quality Checklist

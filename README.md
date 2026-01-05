@@ -11,21 +11,20 @@ AI-powered personal knowledge management using OpenCode skills.
 Just ask Claude:
 - "Process this YouTube video: https://..."
 - "Process my highlights from [Book Title]"
+- "Create a context for the [Repo Name] repository"
 - "What connects X and Y in my vault?"
 
 ## Utilities
 
 ```bash
-source venv/bin/activate
-
 # Fetch YouTube transcript
-python utils/fetch.py "https://youtube.com/..."
+./bin/fetch "https://youtube.com/..."
 
 # Get book highlights
-python utils/highlights.py "Book Title"
+./bin/highlights "Book Title"
 
 # Rebuild concept index
-python utils/index.py
+./bin/index
 ```
 
 ## Skills

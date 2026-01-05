@@ -7,13 +7,13 @@ description: Process a YouTube video into vault notes with intelligent cross-ref
 
 Process a YouTube video from URL to fully integrated vault note:
 
-1. **Fetch transcript** — Run `python utils/fetch.py <url>`
+1. **Fetch transcript** — Run `./bin/fetch <url>`
 2. **Load context** — Use `vault-context` skill to understand existing knowledge
 3. **Analyze content** — Extract key ideas, claims, and concepts
 4. **Find connections** — Link to existing notes, concepts, and themes
 5. **Write note** — Create structured markdown with cross-references
 6. **Update context** — Add to theme's `_context.md`
-7. **Rebuild index** — Run `python utils/index.py`
+7. **Rebuild index** — Run `./bin/index`
 
 ## When to Use Me
 
@@ -26,7 +26,7 @@ When the user says:
 
 ### Step 1: Get Transcript
 ```bash
-python utils/fetch.py "https://youtube.com/watch?v=VIDEO_ID"
+./bin/fetch "https://youtube.com/watch?v=VIDEO_ID"
 ```
 This outputs the transcript to stdout. Read it.
 
@@ -115,7 +115,7 @@ Add to `vault/{Theme}/_context.md`:
 
 ### Step 6: Rebuild Index
 ```bash
-python utils/index.py
+./bin/index
 ```
 
 ## Quality Checklist
