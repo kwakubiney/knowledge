@@ -1,3 +1,0 @@
-# Dummy change to test hook
-Test content
-def hello(): print('world')

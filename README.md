@@ -27,6 +27,26 @@ Just ask Claude:
 ./bin/index
 ```
 
+## Live Context (Git Hooks)
+
+Keep your project context up-to-date automatically as you work.
+
+### 1. Install the hook
+```bash
+./bin/install-hook /path/to/your/project
+```
+
+### 2. Work normally
+When you `git commit`, a context update is queued in `inbox/`.
+
+### 3. Process updates
+Ask Claude:
+> "Check my inbox for updates"
+
+Claude will read the pending commits and update the relevant `_context.md` files (Evolution Log, Architecture) if the changes are significant.
+
+---
+
 ## Skills
 
 Located in `.opencode/skill/`:

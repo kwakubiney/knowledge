@@ -37,12 +37,48 @@ Read the vault to understand what's already there:
 - What open questions might this answer?
 
 ### Step 3: Analyze & Connect
+
 As I analyze the content, actively look for:
 - **Concepts that match existing notes** → Create `[[wiki-links]]`
 - **Ideas that extend existing themes** → Note the extension
 - **Answers to open questions** → Reference the question
 - **New concepts worth tracking** → Flag for concept notes
 - **Cross-domain connections** → The MOST valuable output
+
+### Step 3.5: Synthesize Deeper Understanding (If Any)
+
+After processing the content, review the conversation and notes. If we have arrived at a **synthesis or deeper understanding** about a topic that doesn't exist in the vault:
+
+1. **Create a concept note** in `vault/{Theme}/Concepts/{Concept Name}.md`
+2. **Include:**
+   - A clear definition
+   - Why it matters
+   - Links to at least 2-3 relevant notes in the vault
+   - Tags: `#concept/{slug}`
+
+Example concept note structure:
+```markdown
+# {Concept Name}
+
+## Definition
+{One sentence definition}
+
+## Why It Matters
+{Why this concept is useful or important}
+
+## Connects To
+- [[{Existing Note 1}]]
+- [[{Existing Note 2}]]
+- [[{Existing Note 3}]]
+
+---
+#concept/{slug} #domain/{theme}
+```
+
+**When to create a concept note:**
+- We explicitly discuss and synthesize an idea (e.g., "Simulation-Reality Gap")
+- The idea cuts across multiple themes
+- It's a framework or mental model worth reusing
 
 ### Step 4: Write the Note
 

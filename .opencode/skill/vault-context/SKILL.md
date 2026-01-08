@@ -70,3 +70,17 @@ After loading context, I should be able to answer:
 2. What questions are still open?
 3. What other domains might this connect to?
 4. Who are the key figures already referenced?
+
+## Concept Creation Protocol
+
+When processing content, if we synthesize a **new deeper understanding** about a topic:
+
+1. **Create** `vault/{Theme}/Concepts/{Concept Name}.md`
+2. **Link** to 2-3 relevant existing notes
+3. **Tag** with `#concept/{slug}` and `#domain/{theme}`
+
+**Who creates concepts:**
+- The user (you) - when you notice a cross-cutting idea
+- Me (the AI) - when processing content, I must either link to an existing concept OR create a stub
+
+**Shared responsibility:** I create stubs, you fill them in during review.

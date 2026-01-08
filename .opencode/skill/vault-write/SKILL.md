@@ -200,3 +200,47 @@ Every note should have:
 - [ ] Relevant tags
 - [ ] Clear source attribution
 - [ ] Date processed
+
+## Concept Note Guidelines
+
+**When to create a concept note:**
+- A synthesis or deeper understanding emerges during discussion
+- The idea cuts across multiple themes
+- It's a reusable framework or mental model
+
+**Structure:**
+```markdown
+---
+aliases: []
+tags:
+  - concept
+  - {theme}
+created: {YYYY-MM-DD}
+---
+
+# {Concept Name}
+
+## Definition
+{Clear one-line definition}
+
+## Why It Matters
+{Why this concept is useful or important}
+
+## Connects To
+- [[{Existing Note 1}]]
+- [[{Existing Note 2}]]
+- [[{Existing Note 3}]]
+
+## First Mentioned
+[[{Source Note}]]
+
+## Notes
+{Your personal thoughts on this concept}
+
+---
+#concept/{slug} #domain/{theme}
+```
+
+**Shared responsibility:**
+- I (AI) create stubs when processing content
+- You (user) fill them in during review
