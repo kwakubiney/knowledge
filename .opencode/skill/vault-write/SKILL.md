@@ -137,24 +137,41 @@ created: {YYYY-MM-DD}
 - {date}: {what changed}
 ```
 
-### 4. Index Files (`{Theme} - Index.md`)
+### 5. Project Ideas
 
 ```markdown
-# {Theme}
+# {Project Title}
 
-This is a collection of resources about **{Theme}**.
+> **Status:** #status/incubation
+> **Themes:** [[{Theme} - Index]] (optional)
+> **Created:** {YYYY-MM-DD}
+> **Cross-Reference:** [[{Related Concepts}]] (optional)
 
-## Books
-- [[{Book} - Master|{Book Title}]]
+---
 
-## Videos
-- [[{Video Note}|{Video Title}]]
+## The Vision
+{What is this project about? What problem does it solve?}
 
-## Key Concepts
-- [[{Concept}]]
+---
 
-## Cross-References
-- [[{Other Theme} - Index|{Other Theme}]]: {connection}
+## Connection to Knowledge
+{How does this project relate to concepts in the vault?}
+
+---
+
+## Next Steps
+- [ ] {Task 1}
+- [ ] {Task 2}
+
+---
+
+## References
+{Links to source material or inspiration}
+
+---
+
+## Tags
+#type/project-idea #status/incubation #domain/{theme}
 ```
 
 ## Wiki-Link Conventions
@@ -165,6 +182,7 @@ This is a collection of resources about **{Theme}**.
 | Aliased link | `[[Note Name\|Display Text]]` | `[[Neuroscience - Index\|Neuroscience]]` |
 | Concept link | `[[Concepts/{Name}]]` or just `[[{Name}]]` | `[[Evolutionary Intelligence]]` |
 | Theme index | `[[{Theme} - Index]]` | `[[AI - Index]]` |
+| Project idea | `[[Projects/{Name}]]` | `[[Projects/AI Plant Tracker]]` |
 | Book master | `[[{Book} - Master]]` | `[[Being Mortal - Master]]` |
 
 ## Tag Taxonomy
@@ -174,8 +192,8 @@ This is a collection of resources about **{Theme}**.
 #subdomain/{subtopic}     - Specific area within domain
 #concept/{concept}        - Key concept
 #person/{name}            - Notable person
-#type/{content-type}      - video, book, article, synthesis
-#status/{status}          - foundational, developing, speculative
+#type/{content-type}      - video, book, article, synthesis, project-idea
+#status/{status}          - foundational, developing, speculative, incubation, active
 #connection/{domains}     - Cross-domain bridge (ai-neuroscience)
 ```
 
@@ -187,6 +205,7 @@ This is a collection of resources about **{Theme}**.
 | Chapter | `{Book} - Chapter {N}.md` | `Being Mortal - Chapter 3.md` |
 | Highlights | `{Book} - Highlights.md` | `Being Mortal - Highlights.md` |
 | Concept | `{Concept Name}.md` | `Evolutionary Intelligence.md` |
+| Project Idea | `Projects/{Title}.md` | `Projects/AI Plant Tracker.md` |
 | Context | `_context.md` | `_context.md` |
 | Questions | `_questions.md` | `_questions.md` |
 | Index | `{Theme} - Index.md` | `Neuroscience - Index.md` |
@@ -241,6 +260,13 @@ created: {YYYY-MM-DD}
 #concept/{slug} #domain/{theme}
 ```
 
+## Project Idea Guidelines
+
+**When to create a project idea:**
+- A creative spark emerges (from research or just a random thought)
+- You identify a "gap" that could be filled by a project
+- You want to apply a concept to a real-world problem
+
 **Shared responsibility:**
-- I (AI) create stubs when processing content
-- You (user) fill them in during review
+- I (AI) create the initial draft when you say "I have an idea"
+- You (user) refine the vision and next steps during review
