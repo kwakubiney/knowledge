@@ -10,8 +10,30 @@ from dataclasses import dataclass
 
 
 # Apple Books database locations (macOS)
-BOOKS_DB = Path.home() / "Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite"
-ANNOTATIONS_DB = Path.home() / "Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite"
+LIBRARY_DIR = Path.home() / "Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary"
+ANNOTATION_DIR = Path.home() / "Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation"
+
+
+def find_db(directory: Path, pattern: str) -> Path:
+    """Find the first sqlite database matching pattern in directory."""
+    if not directory.exists():
+        raise FileNotFoundError(f"Directory not found: {directory}. This utility requires macOS and Apple Books.")
+    
+    databases = list(directory.glob(pattern))
+    if not databases:
+        raise FileNotFoundError(f"No database found in {directory} matching {pattern}")
+    
+    return databases[0]
+
+
+try:
+    BOOKS_DB = find_db(LIBRARY_DIR, "BKLibrary*.sqlite")
+    ANNOTATIONS_DB = find_db(ANNOTATION_DIR, "AEAnnotation*.sqlite")
+except FileNotFoundError as e:
+    # We define these as None if not found so the script can fail gracefully in main()
+    BOOKS_DB = None
+    ANNOTATIONS_DB = None
+    DB_ERROR = str(e)
 
 
 @dataclass
@@ -31,8 +53,8 @@ class Highlight:
 
 def get_book_asset_id(book_title: str) -> str | None:
     """Find the asset ID for a book by title."""
-    if not BOOKS_DB.exists():
-        raise FileNotFoundError(f"Books database not found at {BOOKS_DB}")
+    if not BOOKS_DB:
+        raise FileNotFoundError(DB_ERROR)
     
     conn = sqlite3.connect(str(BOOKS_DB))
     cursor = conn.cursor()
@@ -56,8 +78,8 @@ def get_book_asset_id(book_title: str) -> str | None:
 
 def get_highlights(asset_id: str) -> list[Highlight]:
     """Get all highlights for a book."""
-    if not ANNOTATIONS_DB.exists():
-        raise FileNotFoundError(f"Annotations database not found at {ANNOTATIONS_DB}")
+    if not ANNOTATIONS_DB:
+        raise FileNotFoundError(DB_ERROR)
     
     conn = sqlite3.connect(str(ANNOTATIONS_DB))
     cursor = conn.cursor()
@@ -88,18 +110,21 @@ def get_highlights(asset_id: str) -> list[Highlight]:
 
 def list_books():
     """List all books with highlights."""
-    if not BOOKS_DB.exists():
-        raise FileNotFoundError(f"Books database not found at {BOOKS_DB}")
+    if not BOOKS_DB or not ANNOTATIONS_DB:
+        raise FileNotFoundError(DB_ERROR)
     
     conn = sqlite3.connect(str(BOOKS_DB))
     cursor = conn.cursor()
+    
+    # We need to reach into the annotations database to find which books have highlights
+    cursor.execute(f"ATTACH DATABASE '{ANNOTATIONS_DB}' AS annotations")
     
     cursor.execute("""
         SELECT ZTITLE, ZAUTHOR
         FROM ZBKLIBRARYASSET
         WHERE ZASSETID IN (
             SELECT DISTINCT ZANNOTATIONASSETID 
-            FROM ZAEANNOTATION 
+            FROM annotations.ZAEANNOTATION 
             WHERE ZANNOTATIONSELECTEDTEXT IS NOT NULL
         )
         ORDER BY ZTITLE

@@ -2,56 +2,67 @@
 
 AI-powered personal knowledge management using OpenCode skills.
 
-## Vault Location
-`~/Documents/knowledge-vault/`  
-(configured in `config.json`)
+## Core Philosophy
+The Knowledge Vault is designed to capture the **intellectual evolution** of various domains. Unlike traditional note-taking, it focuses on identifying **concepts** and their connections across different themes (Neuroscience, AI, Medicine, etc.).
+
+## Setup
+
+### 1. Requirements
+- macOS (required for Apple Books integration)
+- Python 3.10+
+- Anthropic Claude (via OpenCode)
+
+### 2. Installation
+```bash
+# Clone the repository
+git clone https://github.com/kwakubiney/knowledge.git
+cd knowledge
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 3. Configuration
+Copy `config.example.json` to `config.json` and set your vault path:
+```json
+{
+    "vault_path": "~/Documents/knowledge-vault"
+}
+```
 
 ## Usage
 
+### Concept-Driven Workflow
 Just ask Claude:
-- "Process this YouTube video: https://..."
-- "Process my highlights from [Book Title]"
-- "Create a context for the [Repo Name] repository"
-- "What connects X and Y in my vault?"
+- "What connects Neuroscience and AI in my vault?"
+- "I just had a breakthrough about [Topic], update my context."
+- "Process this YouTube video: [URL]"
+- "Extract my highlights from [Book Title]"
 
-## Utilities
-
+### Command Line Tools
 ```bash
 # Fetch YouTube transcript
-./bin/fetch "https://youtube.com/..."
+./bin/fetch "[URL]"
 
-# Get book highlights
-./bin/highlights "Book Title"
+# List books with highlights (macOS Apple Books)
+./bin/highlights list
 
-# Rebuild concept index
+# Get highlights for a specific book
+./bin/highlights "[Book Title]"
+
+# Rebuild concept index for fast lookup
 ./bin/index
 ```
 
-## Live Context (Git Hooks)
-
-Keep your project context up-to-date automatically as you work.
-
-### 1. Install the hook
-```bash
-./bin/install-hook /path/to/your/project
-```
-
-### 2. Work normally
-When you `git commit`, a context update is queued in `inbox/`.
-
-### 3. Process updates
-Ask Claude:
-> "Check my inbox for updates"
-
-Claude will read the pending commits and update the relevant `_context.md` files (Evolution Log, Architecture) if the changes are significant.
-
----
-
 ## Skills
-
 Located in `.opencode/skill/`:
-- `vault-context` — Load existing knowledge
-- `process-youtube` — Video → note workflow
-- `process-book` — Book → note workflow
-- `synthesize-knowledge` — Cross-domain connections
-- `vault-write` — Note formatting
+- `vault-context` — Load existing knowledge and connections.
+- `update-context` — Capture breakthroughs and evolutions in a domain.
+- `synthesize-knowledge` — Identify patterns and create bridge notes across domains.
+- `process-youtube` — Transform video transcripts into vault notes.
+- `process-book` — Transform highlights into structured chapter notes.
+- `vault-write` — Ensures consistency in note formatting and tagging.

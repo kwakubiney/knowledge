@@ -1,8 +1,3 @@
 {
-    "vault_path": "~/Documents/knowledge-vault",
-    "concept_index": "~/Documents/knowledge-vault/concept_index.json",
-    "repos": {
-        "knowledge": "~/Desktop/knowledge",
-        "payment-gateway": "~/work/hubtel/payment-gateway"
-    }
+    "vault_path": "~/Documents/knowledge-vault"
 }
