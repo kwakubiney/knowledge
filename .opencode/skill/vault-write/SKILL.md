@@ -219,6 +219,41 @@ Every note should have:
 - [ ] Relevant tags
 - [ ] Clear source attribution
 - [ ] Date processed
+- [ ] **Semantic link suggestions checked** (see below)
+
+## Semantic Link Discovery
+
+Before finalizing any note, use qmd to discover non-obvious connections:
+
+```bash
+# Search using the note's key concepts
+qmd search "key concept 1 concept 2" -n 10
+
+# Or use the note title/summary
+qmd search "title or summary text" -n 10
+```
+
+**Integration workflow:**
+
+1. **After drafting the note**, extract 3-5 key concepts
+2. **Run semantic search** on each concept
+3. **Review results** for notes that should be linked
+4. **Add wiki-links** to discovered connections
+5. **Update the "Connections to Existing Knowledge" section** with findings
+
+**Example:**
+
+When writing a note about "AI interpretability," run:
+```bash
+qmd search "AI interpretability understanding neural networks" -n 10
+```
+
+This might surface:
+- `[[Anthropic - Mapping the Inner Workings of Claude]]`
+- `[[Neuroscience/Concepts/Neural Decoding]]`
+- `[[Demis Hassabis - Scaling and Innovation]]`
+
+Add these as explicit connections in the note.
 
 ## Concept Note Guidelines
 

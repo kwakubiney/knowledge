@@ -1,0 +1,79 @@
+#!/bin/bash
+# QMD helper - Semantic search for knowledge vault
+# 
+# Usage:
+#   qmd-search "query"                    # Basic BM25 search
+#   qmd-search -v "query"                 # Vector semantic search
+#   qmd-search -q "query"                 # Hybrid query (best quality)
+#   qmd-search -r "note content"          # Find related notes
+#   qmd-search --update                   # Re-index vault
+#   qmd-search --status                   # Show index status
+#
+# Options:
+#   -n <num>                              # Number of results (default: 5)
+#   --json                                # Output as JSON
+#   --full                                # Show full content
+#   -c <collection>                       # Filter to collection
+
+export PATH="/Users/biney/.bun/bin:$PATH"
+
+# Check if qmd is installed
+if ! command -v qmd &> /dev/null; then
+    echo "Error: qmd is not installed" >&2
+    echo "Install with: bun install -g https://github.com/tobi/qmd" >&2
+    exit 1
+fi
+
+# Parse command
+case "$1" in
+    --update)
+        shift
+        qmd update "$@"
+        qmd embed
+        ;;
+    --status)
+        qmd status
+        ;;
+    -v)
+        shift
+        # Vector search (semantic similarity)
+        qmd vsearch "$@"
+        ;;
+    -q)
+        shift
+        # Hybrid query with reranking (best quality)
+        qmd query "$@"
+        ;;
+    -r|--related)
+        shift
+        # Find related notes by searching with the content
+        # Useful when you have a note and want to find connections
+        qmd vsearch "$@" -n 10 --min-score 0.3
+        ;;
+    --help|-h)
+        echo "QMD Helper - Semantic search for knowledge vault"
+        echo ""
+        echo "Usage:"
+        echo "  qmd-search \"query\"                    # Basic BM25 search"
+        echo "  qmd-search -v \"query\"                 # Vector semantic search"
+        echo "  qmd-search -q \"query\"                 # Hybrid query (best quality)"
+        echo "  qmd-search -r \"note content\"          # Find related notes"
+        echo "  qmd-search --update                   # Re-index vault"
+        echo "  qmd-search --status                   # Show index status"
+        echo ""
+        echo "Options:"
+        echo "  -n <num>                              # Number of results (default: 5)"
+        echo "  --json                                # Output as JSON"
+        echo "  --full                                # Show full content"
+        echo "  -c <collection>                       # Filter to collection"
+        echo ""
+        echo "Examples:"
+        echo "  qmd-search \"neural plasticity\""
+        echo "  qmd-search -v \"brain adaptation learning\" -n 10"
+        echo "  qmd-search -r \"AI can learn from biological patterns\" --json"
+        ;;
+    *)
+        # Default: basic BM25 search
+        qmd search "$@"
+        ;;
+esac

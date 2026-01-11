@@ -24,15 +24,50 @@ When the user asks:
 
 ## Workflow
 
-### Pattern Discovery
+### Pattern Discovery with qmd
+
+Use semantic search to discover connections that keyword matching would miss:
+
+```bash
+# Search for conceptually related notes
+qmd search "key concept from note" -n 10
+
+# Get results as JSON for systematic processing
+qmd search "concept" --json -n 15 --min-score 0.3
+```
+
+**Discovery workflow:**
 
 1. **Read all theme contexts** — `vault/*/_context.md`
-2. **Compare foundational concepts** — Look for:
+2. **Extract key concepts** from each theme
+3. **Run cross-domain semantic searches**:
+   ```bash
+   # Find AI concepts that relate to neuroscience
+   qmd search "brain learning neural patterns" -n 10
+   
+   # Find neuroscience concepts that relate to AI
+   qmd search "artificial neural network intelligence" -n 10
+   ```
+4. **Compare foundational concepts** — Look for:
    - Same concept, different names (synonyms)
    - Same person mentioned in multiple domains
    - Complementary ideas (one explains the other)
    - Contradictions (tension worth exploring)
-3. **Check concept index** — `concept_index.json` for overlapping terms
+5. **Check concept index** — `concept_index.json` for overlapping terms
+
+### Finding Hidden Connections
+
+qmd excels at finding connections you wouldn't notice manually:
+
+```bash
+# Take a key insight from one domain and search across all themes
+qmd search "survival of the fittest optimization" -n 10
+
+# The results might surface:
+# - AI: "Evolution as optimization" from Hassabis notes
+# - Neuroscience: "Brain as evolved optimizer"  
+# - Drug Discovery: "Evolutionary algorithms for protein folding"
+```
 
 ### Types of Connections
 

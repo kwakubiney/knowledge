@@ -1,0 +1,103 @@
+#!/bin/bash
+# QMD File Watcher - Auto-updates index when vault files change
+#
+# Usage:
+#   ./bin/qmd-watch          # Run in foreground
+#   ./bin/qmd-watch start    # Start as background service
+#   ./bin/qmd-watch stop     # Stop background service
+#   ./bin/qmd-watch status   # Check if running
+
+set -e
+
+export PATH="/Users/biney/.bun/bin:/opt/homebrew/bin:$PATH"
+
+VAULT_PATH="$HOME/Documents/knowledge-vault"
+PIDFILE="$HOME/.cache/qmd/watcher.pid"
+LOGFILE="$HOME/.cache/qmd/watcher.log"
+
+# Ensure cache directory exists
+mkdir -p "$HOME/.cache/qmd"
+
+# Debounce: only update if no changes for 5 seconds
+DEBOUNCE_SECONDS=5
+LAST_UPDATE=0
+
+update_index() {
+    local now=$(date +%s)
+    local elapsed=$((now - LAST_UPDATE))
+    
+    if [ $elapsed -ge $DEBOUNCE_SECONDS ]; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Updating qmd index..." >> "$LOGFILE"
+        qmd update >> "$LOGFILE" 2>&1
+        
+        # Only run embed if there are new documents needing vectors
+        if qmd status 2>/dev/null | grep -q "need vectors"; then
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] Generating embeddings..." >> "$LOGFILE"
+            qmd embed >> "$LOGFILE" 2>&1
+        fi
+        
+        LAST_UPDATE=$(date +%s)
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Index updated" >> "$LOGFILE"
+    fi
+}
+
+watch_vault() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting qmd watcher for $VAULT_PATH" >> "$LOGFILE"
+    
+    # Initial update
+    update_index
+    
+    # Watch for .md file changes
+    fswatch -0 --include='\.md$' --exclude='.*' "$VAULT_PATH" | while read -d "" event; do
+        update_index
+    done
+}
+
+case "${1:-}" in
+    start)
+        if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+            echo "Watcher already running (PID $(cat "$PIDFILE"))"
+            exit 0
+        fi
+        
+        echo "Starting qmd watcher..."
+        nohup "$0" >> "$LOGFILE" 2>&1 &
+        echo $! > "$PIDFILE"
+        echo "Watcher started (PID $!)"
+        echo "Log: $LOGFILE"
+        ;;
+    
+    stop)
+        if [ -f "$PIDFILE" ]; then
+            PID=$(cat "$PIDFILE")
+            if kill -0 "$PID" 2>/dev/null; then
+                echo "Stopping watcher (PID $PID)..."
+                kill "$PID"
+                rm -f "$PIDFILE"
+                echo "Stopped"
+            else
+                echo "Watcher not running (stale PID file)"
+                rm -f "$PIDFILE"
+            fi
+        else
+            echo "Watcher not running"
+        fi
+        ;;
+    
+    status)
+        if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+            echo "Watcher running (PID $(cat "$PIDFILE"))"
+            echo "Log: $LOGFILE"
+            echo ""
+            echo "Recent activity:"
+            tail -5 "$LOGFILE" 2>/dev/null || echo "(no log yet)"
+        else
+            echo "Watcher not running"
+        fi
+        ;;
+    
+    *)
+        # Run in foreground (for launchd)
+        watch_vault
+        ;;
+esac
