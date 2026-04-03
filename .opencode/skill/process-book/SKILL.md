@@ -1,17 +1,15 @@
 ---
 name: process-book
-description: Process book chapters or highlights into vault notes with full synthesis
+description: Route book processing to highlights or chapters workflows
 ---
 
 ## What I Do
 
-Process book content (highlights from Apple Books or pasted chapters) into integrated vault notes:
+I route book work into the right workflow:
 
-1. **Extract content** — For Apple Books: `./bin/highlights "<Book Title>"`
-2. **Load context** — Use `vault-context` skill
-3. **Synthesize** — Create structured notes with cross-references
-4. **Update context** — Enrich book and theme `_context.md` files
-5. **Rebuild index** — Run `./bin/index`
+1. **Highlights flow** — Use `process-book-highlights` for Apple Books highlights
+2. **Chapters flow** — Use `process-book-chapters` for pasted chapter text
+3. **Respect lookup policy** — Do not query prior vault content unless explicitly requested (or `XCD`)
 
 ## When to Use Me
 
@@ -22,129 +20,38 @@ When the user says:
 
 ## Workflow
 
-### Step 1: Get Content
+### Step 1: Detect Input Type
 
-**For Apple Books highlights:**
-```bash
-./bin/highlights "Book Title"
-```
+- If input is Apple Books highlights, use `process-book-highlights`.
+- If input is chapter text pasted by user, use `process-book-chapters`.
 
-**For pasted content:**
-User will paste the text directly.
+### Step 2: Choose Book Folder
 
-### Step 2: Load Context
+Use a book-first path:
 
-Before processing, understand:
-- What theme does this book belong to?
-- Is there existing context for this book?
-- What concepts already exist in this domain?
-- What open questions might this content address?
+- `vault/books/{book-slug}/highlights/highlights.md`
+- `vault/books/{book-slug}/chapters/ch-{NN}.md`
+- Optional: `vault/books/{book-slug}/_context.md` (only when explicitly requested)
 
-### Step 3: Create/Update Book Context
+### Step 3: Respect Lookup and Backlink Rules
 
-If this is the first content from a book, create `vault/{Theme}/{Book}/_context.md`:
+- Do not search previous notes by default.
+- Only do vault/QMD lookups if explicitly requested (or `XCD`).
+- Only add backlinks/connections when explicitly requested.
 
-```markdown
-# {Book Title} - Context
-**Author:** {Author}
-**Theme:** [[{Theme} - Index|{Theme}]]
-**Started:** {date}
-**Last Updated:** {date}
+### Step 4: Optional Shared Context and Index
 
-## Core Thesis
-{The main argument of the book, synthesized from content}
+- If requested, create/update `vault/books/{book-slug}/_context.md`.
+- If requested, run `./bin/index`.
 
-## Key Concepts
-{Concepts that keep appearing, with definitions}
+## Delegation Notes
 
-## Recurring Themes
-{Patterns across chapters/highlights}
-
-## Open Questions
-- [ ] {Questions the book raises or leaves unanswered}
-
-## Connections to Other Work
-| This Book | Related Work | Connection |
-|-----------|--------------|------------|
-| {concept} | [[{other note}]] | {how they relate} |
-
-## Personal Notes
-{User's own synthesis and reactions}
-
-## Evolution Log
-- {date}: {what was processed}
-```
-
-### Step 4: Create Content Note
-
-**For highlights:**
-```markdown
-# {Book Title} - Highlights
-
-> **Source:** {Book Title} by {Author}
-> **Theme:** [[{Theme} - Index|{Theme}]]
-> **Processed:** {date}
-
----
-
-## Key Highlights
-
-### {Thematic Group 1}
-
-> "{Highlight text}"
-> — Chapter {N}
-
-{My synthesis: what this means, how it connects to [[existing concept]]}
-
----
-
-## Synthesis
-
-{Overall synthesis of highlights with rich cross-references}
-
----
-
-## Concepts Discovered
-
-### {New Concept}
-**Definition:** {from the book}
-**Connects to:** [[{existing concept}]]
-```
-
-**For chapters:**
-```markdown
-# {Book Title} - Chapter {N}
-
-> **Source:** {Book Title} by {Author} | Chapter {N}
-> **Theme:** [[{Theme} - Index|{Theme}]]
-
----
-
-## Summary
-{Chapter summary with cross-references}
-
-## Key Arguments
-{Main points with connections}
-
-## Questions Raised
-{Questions for later chapters or other books}
-```
-
-### Step 5: Update Context Files
-
-1. **Book context** — Add new concepts, update thesis understanding
-2. **Theme context** — Add cross-references if new connections found
-3. **Evolution log** — Record what was processed
-
-### Step 6: Rebuild Index
-```bash
-./bin/index
-```
+- For highlights, follow `.opencode/skill/process-book-highlights/SKILL.md`.
+- For chapters, follow `.opencode/skill/process-book-chapters/SKILL.md`.
 
 ## Quality Checklist
 
-- [ ] Core thesis captured (for books with enough content)
-- [ ] Cross-references to at least 2 existing notes
-- [ ] Book context file created/updated
-- [ ] Theme context updated if new connections found
-- [ ] Open questions captured
+- [ ] Correct flow chosen (highlights vs chapters)
+- [ ] Files created under `vault/books/{book-slug}/...`
+- [ ] No vault lookups unless explicitly requested
+- [ ] Backlinks/connections added only when explicitly requested

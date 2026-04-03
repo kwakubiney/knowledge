@@ -14,8 +14,8 @@ Before processing ANY new content into the knowledge vault, I load the relevant 
 1. **Theme Context** — Read `vault/{Theme}/_context.md` for the relevant domain
 2. **Book Context** — If processing book content, read `vault/{Theme}/{Book}/_context.md`
 3. **Concept Index** — Scan `concept_index.json` for existing concepts
-4. **Semantic Discovery** — Use `qmd` to find semantically related notes
-5. **Cross-Domain Connections** — Check other themes' contexts for potential bridges
+4. **Optional Semantic Discovery** — Use `qmd` only when explicitly requested
+5. **Optional Cross-Domain Check** — Only when needed for the task
 
 ## Semantic Search with qmd Tools
 
@@ -27,12 +27,14 @@ The vault is indexed by `qmd`, a local semantic search engine. Use the following
 - **qmd_get** — Retrieve full content of a specific note/document.
 - **qmd_multi_get** — Retrieve multiple documents matching a glob pattern.
 
-### Automatic Tool Selection
+### Tool Selection Policy
 
-You should use these tools automatically whenever:
-1. The user asks about their personal notes, highlights, or previous research.
-2. You need to verify if a concept already exists before creating a new note.
-3. You are looking for semantic bridges between themes.
+Use QMD tools when:
+1. The user explicitly asks to search the vault
+2. The user asks what relates to the current topic
+3. The user uses the `XCD` trigger
+
+Otherwise, do not run QMD by default.
 
 ### Example Tool Use
 
@@ -44,18 +46,11 @@ qmd_query({ query: "neural plasticity mechanisms" })
 qmd_get({ file: "Neuroscience/plasticity-basics.md" })
 ```
 
-### Using qmd Tools Before Processing Content
+### Using qmd Tools (On Demand)
 
-**Before processing ANY new content** (YouTube videos, books, etc.), always extract 2-3 key concepts and search the vault using `qmd_query`:
+If QMD is requested, extract 2-3 key concepts and run a targeted `qmd_query`.
 
-```typescript
-// Example: Before processing a video about "AI safety and alignment"
-qmd_query({ query: "AI safety alignment", limit: 10 })
-```
-
-This ensures you have the full context of what already exists in the vault.
-
-### Workflow Enhancement
+### Workflow Enhancement (When QMD Is Requested)
 
 1. **Extract concepts** from the new content (title, key terms)
 2. **Run semantic search** to find existing related notes
@@ -65,11 +60,13 @@ This ensures you have the full context of what already exists in the vault.
 
 ## When to Use Me
 
-**ALWAYS** use this skill before:
+Use this skill before:
 - Processing a YouTube video
 - Processing book highlights/chapters
 - Creating synthesis notes
 - Answering questions about the vault
+
+Keep context loading lightweight unless deeper discovery is requested.
 
 ## How to Use Me
 
@@ -128,6 +125,4 @@ When processing content, if we synthesize a **new deeper understanding** about a
 
 **Who creates concepts:**
 - The user (you) - when you notice a cross-cutting idea
-- Me (the AI) - when processing content, I must either link to an existing concept OR create a stub
-
-**Shared responsibility:** I create stubs, you fill them in during review.
+- Me (the AI) - only when explicitly requested or clearly useful

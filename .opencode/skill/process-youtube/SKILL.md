@@ -1,19 +1,18 @@
 ---
 name: process-youtube
-description: Process a YouTube video into vault notes with intelligent cross-references
+description: Process a YouTube video into a clean vault note
 ---
 
 ## What I Do
 
-Process a YouTube video from URL to fully integrated vault note:
+Process a YouTube video from URL to a structured vault note:
 
 1. **Fetch transcript** — Run `./bin/fetch <url>`
-2. **Load context** — Use `vault-context` skill to understand existing knowledge
+2. **Load context (lightweight)** — Read only what is needed for accurate summary
 3. **Analyze content** — Extract key ideas, claims, and concepts
-4. **Find connections** — Link to existing notes, concepts, and themes
-5. **Write note** — Create structured markdown with cross-references
-6. **Update context** — Add to theme's `_context.md`
-7. **Rebuild index** — Run `./bin/index`
+4. **Write note** — Create clear markdown focused on the video itself
+5. **Optional connections** — Add links only when explicitly requested or clearly high-value
+6. **Optional updates** — Update context/index only when needed
 
 ## When to Use Me
 
@@ -36,49 +35,25 @@ Read the vault to understand what's already there:
 - What concepts already exist?
 - What open questions might this answer?
 
-### Step 3: Analyze & Connect
+Default behavior: do this without QMD unless explicitly requested.
 
-As I analyze the content, actively look for:
-- **Concepts that match existing notes** → Create `[[wiki-links]]`
-- **Ideas that extend existing themes** → Note the extension
-- **Answers to open questions** → Reference the question
-- **New concepts worth tracking** → Flag for concept notes
-- **Cross-domain connections** → The MOST valuable output
+Use QMD only when:
+- The user explicitly asks for related notes/connections
+- The user uses `XCD`
 
-### Step 3.5: Synthesize Deeper Understanding (If Any)
+### Step 3: Analyze
 
-After processing the content, review the conversation and notes. If we have arrived at a **synthesis or deeper understanding** about a topic that doesn't exist in the vault:
+As I analyze the content, prioritize:
+- Main argument and key claims
+- Supporting examples
+- Practical takeaways
+- Questions or caveats
 
-1. **Create a concept note** in `vault/{Theme}/Concepts/{Concept Name}.md`
-2. **Include:**
-   - A clear definition
-   - Why it matters
-   - Links to at least 2-3 relevant notes in the vault
-   - Tags: `#concept/{slug}`
+### Step 3.5: Optional Connection Pass
 
-Example concept note structure:
-```markdown
-# {Concept Name}
+Only if requested (or clearly useful), add a brief connection section that links to existing notes.
 
-## Definition
-{One sentence definition}
-
-## Why It Matters
-{Why this concept is useful or important}
-
-## Connects To
-- [[{Existing Note 1}]]
-- [[{Existing Note 2}]]
-- [[{Existing Note 3}]]
-
----
-#concept/{slug} #domain/{theme}
-```
-
-**When to create a concept note:**
-- We explicitly discuss and synthesize an idea (e.g., "Simulation-Reality Gap")
-- The idea cuts across multiple themes
-- It's a framework or mental model worth reusing
+Do not force concept-note creation or cross-domain synthesis.
 
 ### Step 4: Write the Note
 
@@ -90,24 +65,12 @@ Use this template:
 > **Source:** {Channel} | [YouTube]({url})
 > **Theme:** [[{Theme} - Index|{Theme}]]
 > **Processed:** {date}
-> **Cross-Reference:** [[{Related Theme}]], [[{Related Note}]]
 
 ---
 
 ## Summary
 
-{Rich summary with [[wiki-links]] to existing concepts}
-
----
-
-## Connections to Existing Knowledge
-
-| This Video Says | Existing Note Says | The Link |
-|-----------------|-------------------|----------|
-| {claim} | [[{note}]] | {how they connect} |
-
-### Key Insight
-> {The most important cross-domain connection discovered}
+{Rich summary of the video}
 
 ---
 
@@ -115,8 +78,6 @@ Use this template:
 
 ### 1. {Concept Name}
 {Definition and why it matters}
-
-**Connects to:** [[{existing concept}]], [[{other note}]]
 
 ---
 
@@ -137,17 +98,19 @@ Use this template:
 
 #domain/{theme} #concept/{concept} #person/{speaker} #type/video
 
----
+## Optional Related Notes
 
-**Backlinks:** [[{Theme} - Index]] | [[{Related Notes}]]
+- [[{Related Note}]]
 ```
 
 ### Step 5: Update Context
 
 Add to `vault/{Theme}/_context.md`:
 - New key figures mentioned
-- New cross-references discovered
+- New facts or viewpoints worth preserving
 - Evolution log entry
+
+Only do this if it adds clear value.
 
 ### Step 6: Rebuild Index
 ```bash
@@ -157,8 +120,7 @@ Add to `vault/{Theme}/_context.md`:
 ## Quality Checklist
 
 Before finishing, verify:
-- [ ] At least 3 cross-references to existing notes
-- [ ] Theme context was read and used
-- [ ] New concepts linked to existing ones
-- [ ] Open questions addressed if relevant
-- [ ] Context file updated with new connections
+- [ ] Summary accurately reflects the video
+- [ ] Key concepts are clear and useful
+- [ ] Open questions captured if relevant
+- [ ] Connections added only if requested or clearly valuable

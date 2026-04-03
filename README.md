@@ -91,11 +91,13 @@ Just ask Claude:
 
 ## Skills
 Located in `.opencode/skill/`:
-- `vault-context` — Load existing knowledge and connections (enhanced with qmd search).
+- `vault-context` — Load only necessary context; use qmd on explicit request.
 - `update-context` — Capture breakthroughs and evolutions in a domain.
 - `synthesize-knowledge` — Identify patterns and create bridge notes across domains (uses qmd for discovery).
 - `process-youtube` — Transform video transcripts into vault notes.
-- `process-book` — Transform highlights into structured chapter notes.
+- `process-book` — Route book input to highlights or chapter workflow.
+- `process-book-highlights` — Build/update `vault/books/{book-slug}/highlights/highlights.md`.
+- `process-book-chapters` — Build/update `vault/books/{book-slug}/chapters/ch-{NN}.md`.
 - `vault-write` — Ensures consistency in note formatting and tagging (includes semantic link suggestions).
 
 ## qmd Integration
@@ -107,13 +109,13 @@ Located in `.opencode/skill/`:
 
 ### How Skills Use qmd
 
-**Before processing new content:**
+**Only on explicit request (or `XCD`):**
 ```bash
 # Find related notes to provide context
 qmd search "key concepts from new content" -n 10
 ```
 
-**When writing notes:**
+**When writing notes (optional):**
 ```bash
 # Discover non-obvious connections to add as wiki-links
 qmd search "note concepts" -n 10

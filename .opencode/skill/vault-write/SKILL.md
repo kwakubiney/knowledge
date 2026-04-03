@@ -30,7 +30,7 @@ Reference this when:
 > **Source:** {Source details with link if applicable}
 > **Theme:** [[{Theme} - Index|{Theme}]]
 > **Processed:** {YYYY-MM-DD}
-> **Cross-Reference:** [[{Related Notes}]]
+> **Cross-Reference:** [[{Related Notes}]] (optional)
 
 ---
 
@@ -42,7 +42,7 @@ Reference this when:
 
 ## Connections to Existing Knowledge
 
-{Table or narrative connecting to other notes}
+{Optional table or narrative connecting to other notes}
 
 ---
 
@@ -50,7 +50,7 @@ Reference this when:
 
 ### {Concept Name}
 {Definition}
-**Connects to:** [[{related}]]
+**Connects to:** [[{related}]] (optional)
 
 ---
 
@@ -73,7 +73,7 @@ Reference this when:
 
 ---
 
-**Backlinks:** [[{Theme} - Index]] | [[{Other Related}]]
+**Backlinks:** [[{Theme} - Index]] | [[{Other Related}]] (optional)
 ```
 
 ### 2. Concept Notes
@@ -140,38 +140,28 @@ created: {YYYY-MM-DD}
 ### 5. Project Ideas
 
 ```markdown
-# {Project Title}
+# {Idea Title}
 
-> **Status:** #status/incubation
-> **Themes:** [[{Theme} - Index]] (optional)
-> **Created:** {YYYY-MM-DD}
-> **Cross-Reference:** [[{Related Concepts}]] (optional)
+## Problem
+{What pain or gap this solves}
 
----
+## Proposed Solution
+{High-level approach}
 
-## The Vision
-{What is this project about? What problem does it solve?}
+## Why Now
+{Why this is worth doing now}
 
----
+## First Step
+{The first concrete action}
 
-## Connection to Knowledge
-{How does this project relate to concepts in the vault?}
+## Constraints
+{Time, tools, dependencies, risks}
 
----
-
-## Next Steps
-- [ ] {Task 1}
-- [ ] {Task 2}
+## Helpful Vault Assets (Optional)
+- {Only if explicitly requested / XCD}
 
 ---
-
-## References
-{Links to source material or inspiration}
-
----
-
-## Tags
-#type/project-idea #status/incubation #domain/{theme}
+#type/project-idea #status/incubation
 ```
 
 ## Wiki-Link Conventions
@@ -182,7 +172,7 @@ created: {YYYY-MM-DD}
 | Aliased link | `[[Note Name\|Display Text]]` | `[[Neuroscience - Index\|Neuroscience]]` |
 | Concept link | `[[Concepts/{Name}]]` or just `[[{Name}]]` | `[[Evolutionary Intelligence]]` |
 | Theme index | `[[{Theme} - Index]]` | `[[AI - Index]]` |
-| Project idea | `[[Projects/{Name}]]` | `[[Projects/AI Plant Tracker]]` |
+| Project idea | `[[ideas/{slug}]]` | `[[ideas/ai-plant-tracker]]` |
 | Book master | `[[{Book} - Master]]` | `[[Being Mortal - Master]]` |
 
 ## Tag Taxonomy
@@ -202,10 +192,10 @@ created: {YYYY-MM-DD}
 | Type | Pattern | Example |
 |------|---------|---------|
 | Content note | `{Title}.md` | `Demis Hassabis - Natures Patterns.md` |
-| Chapter | `{Book} - Chapter {N}.md` | `Being Mortal - Chapter 3.md` |
-| Highlights | `{Book} - Highlights.md` | `Being Mortal - Highlights.md` |
+| Chapter | `books/{book-slug}/chapters/ch-{NN}.md` | `books/breakneck/chapters/ch-03.md` |
+| Highlights | `books/{book-slug}/highlights/highlights.md` | `books/breakneck/highlights/highlights.md` |
 | Concept | `{Concept Name}.md` | `Evolutionary Intelligence.md` |
-| Project Idea | `Projects/{Title}.md` | `Projects/AI Plant Tracker.md` |
+| Project Idea | `ideas/{slug}.md` | `ideas/ai-plant-tracker.md` |
 | Context | `_context.md` | `_context.md` |
 | Questions | `_questions.md` | `_questions.md` |
 | Index | `{Theme} - Index.md` | `Neuroscience - Index.md` |
@@ -214,16 +204,16 @@ created: {YYYY-MM-DD}
 ## Quality Standards
 
 Every note should have:
-- [ ] At least one wiki-link to existing content
-- [ ] Proper theme backlink
+- [ ] Clear structure for the note type
+- [ ] Wiki-links/backlinks only when useful or explicitly requested
 - [ ] Relevant tags
 - [ ] Clear source attribution
 - [ ] Date processed
-- [ ] **Semantic link suggestions checked** (see below)
+- [ ] Optional semantic links only when requested or high-value
 
 ## Semantic Link Discovery
 
-Before finalizing any note, use qmd to discover non-obvious connections:
+Use QMD for semantic link discovery only when explicitly requested (or when it clearly improves the note):
 
 ```bash
 # Search using the note's key concepts
@@ -233,13 +223,13 @@ qmd search "key concept 1 concept 2" -n 10
 qmd search "title or summary text" -n 10
 ```
 
-**Integration workflow:**
+**Integration workflow (optional):**
 
 1. **After drafting the note**, extract 3-5 key concepts
-2. **Run semantic search** on each concept
-3. **Review results** for notes that should be linked
-4. **Add wiki-links** to discovered connections
-5. **Update the "Connections to Existing Knowledge" section** with findings
+2. **Run semantic search** on selected concepts
+3. **Review results** for links that materially improve understanding
+4. **Add only high-signal wiki-links**
+5. **Skip connection sections** when they add little value
 
 **Example:**
 
@@ -253,7 +243,7 @@ This might surface:
 - `[[Neuroscience/Concepts/Neural Decoding]]`
 - `[[Demis Hassabis - Scaling and Innovation]]`
 
-Add these as explicit connections in the note.
+Add only the links that meaningfully improve the note.
 
 ## Concept Note Guidelines
 
